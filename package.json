@@ -1,0 +1,19 @@
+{
+  "name": "nestjs-learning",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/webenot/nestjs-learning.git"
+  },
+  "author": "aquilla@ukr.net",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/webenot/nestjs-learning/issues"
+  },
+  "homepage": "https://github.com/webenot/nestjs-learning#readme"
+}
