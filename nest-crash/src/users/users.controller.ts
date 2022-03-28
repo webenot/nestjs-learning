@@ -1,6 +1,16 @@
-import { Body, Controller, Get, NotFoundException, Param, ParseIntPipe, Put, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto';
+import { CreateUserDto, UserDto } from './dto';
 import { User } from './entities';
 import {
   ApiBadRequestResponse,
@@ -23,25 +33,35 @@ export class UsersController {
   @ApiOkResponse({ type: User, isArray: true })
   @ApiQuery({ name: 'name', required: false })
   @Get()
-  public getUsers (@Query('name') name?: string): User[] {
-    return this._usersService.findAll(name);
+  public getUsers (@Query('name') name?: string): Promise<User[]> {
+    return this._usersService.findAllUsers(name);
   }
 
   @ApiOkResponse({ type: User })
   @ApiNotFoundResponse()
   @Get(':id')
-  public getUserById (@Param('id', ParseIntPipe) id: number): User { // TODO: auto parse ID
-    const user = this._usersService.findById(id);
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-    return user;
+  public async getUserById (@Param('id', ParseIntPipe) id: number): Promise<User> {
+    return await this._usersService.findUserById(id);
   }
 
   @ApiCreatedResponse({ type: User })
   @ApiBadRequestResponse()
   @Put()
-  public createUser (@Body() body: CreateUserDto): User {
+  public createUser (@Body() body: CreateUserDto): Promise<User> {
     return this._usersService.createUser(body);
+  }
+
+  @ApiCreatedResponse({ type: User })
+  @ApiBadRequestResponse()
+  @Patch()
+  public updateUser (@Body() body: UserDto): Promise<User> {
+    return this._usersService.updateUser(body);
+  }
+
+  @ApiCreatedResponse({ type: User })
+  @ApiBadRequestResponse()
+  @Delete(':id')
+  public deleteUser (@Param('id', ParseIntPipe) id: number): Promise<User> {
+    return this._usersService.deleteUser(id);
   }
 }
